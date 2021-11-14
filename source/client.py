@@ -77,8 +77,26 @@ def listen_to_server(client):
         game_data = messages.parse_message(msg,game_data)
         # print(f'recieved message {str(msg,"utf-8")}')
 
+def simplify_vector(vector):
+    x = vector[0]
+    y = vector[1]
+    done = False
+    vector_counter = 0
+    while done == False:
+        vector_counter = 0
+        for i + 2 in range(8):
+            if x % i == 0 and y % i == 0:
+                x = x/i
+                y = y/i
+            else:
+                vector_counter += 1
+        if vector_counter == 8:
+            done = True
+
 server_listener = threading.Thread(target=lambda:listen_to_server(client))
 server_listener.start()
+
+shoot_counter = 0
 
 while game_state != 0:
     clock.tick(60)
@@ -89,6 +107,7 @@ while game_state != 0:
                 pygame.quit()
                 client.close()
                 quit()
+
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RIGHT]:
             new_x = (game_data["players"][player_id]["x"]+1)+75
@@ -110,6 +129,11 @@ while game_state != 0:
             if !(new_y < 0 or new_y + 75 > HEIGHT):
                 game_data["players"][player_id]["y"]+=1
                 messages.send_message(f"move {player_id} 1",client)
+
+        if keys[pygame.K_SPACE]:
+            if shoot_counter > 10:
+                shoot_counter = 0
+                #shoot()
 
         animation_counter += 1
         if animation_counter == 10:

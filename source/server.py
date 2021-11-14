@@ -15,8 +15,8 @@ client1,addr1 = server.accept()
 client2,addr2 = server.accept()
 #data = client.recv(max_size)
 
-gamedata = {"players":[{"x":500, "y":50, "image":"assets/players/player1.png"},
-    {"x":500, "y":575, "image":"assets/players/player2.png"}]
+gamedata = {"players":[{"x":500, "y":50, "image":"assets/players/player1.png", "bullets":[]},
+    {"x":500, "y":575, "image":"assets/players/player2.png","bullets":[]}]
 }
 
 gamedata_string = json.dumps(gamedata)

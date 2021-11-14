@@ -91,29 +91,25 @@ while game_state != 0:
                 quit()
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RIGHT]:
-            new_x = (game_data["players"][player_id]["x"]+1)+50
-            player_y = game_data['players'][player_id]["y"]
-
-            tile_1 = game_data['level']['grid'][game_data['players'][player_id]["y"]//50][new_x//50]
-            tile_2 = 0
-            if player_y % 50 != 0:
-                tile_2 = game_data['level']["grid"][(game_data["players"][player_id]["y"]+50)//50][new_x//50]
-
-            if tile_1 != 1 and tile_2 != 1:
+            new_x = (game_data["players"][player_id]["x"]+1)+75
+            if !(new_x < 0 or new_x + 75 > WIDTH):
                 game_data["players"][player_id]["x"]+=1
                 messages.send_message(f"move {player_id} 1",client)
         elif keys[pygame.K_LEFT]:
             new_x = (game_data["players"][player_id]["x"]-1)
-            player_y = game_data['players'][player_id]["y"]
-
-            tile_1 = game_data['level']['grid'][game_data['players'][player_id]["y"]//50][new_x//50]
-            tile_2 = 0
-            if player_y % 50 != 0:
-                tile_2 = game_data['level']["grid"][(game_data["players"][player_id]["y"]+50)//50][new_x//50]
-
-            if tile_1 != 1 and tile_2 != 1:
+            if !(new_x < 0 or new_x + 75 > WIDTH):
                 game_data["players"][player_id]["x"]-=1
-                messages.send_message(f"move {player_id} -1",client)
+                messages.send_message(f"move {player_id} 1",client)
+        elif keys[pygame.K_UP]:
+            new_y = (game_data["players"][player_id]["y"]-1)
+            if !(new_y < 0 or new_y + 75 > HEIGHT):
+                game_data["players"][player_id]["y"]-=1
+                messages.send_message(f"move {player_id} 1",client)
+        elif keys[pygame.K_DOWN]:
+            new_y = (game_data["players"][player_id]["y"]+1)+75
+            if !(new_y < 0 or new_y + 75 > HEIGHT):
+                game_data["players"][player_id]["y"]+=1
+                messages.send_message(f"move {player_id} 1",client)
 
         animation_counter += 1
         if animation_counter == 10:
@@ -131,7 +127,7 @@ while game_state != 0:
                     player2_animation_direction = 0
                 player2_animation_state += player2_animation_direction
             animation_counter = 0
-            
+
         display_bg()
         display_players()
         pygame.display.update()

@@ -15,12 +15,6 @@ client1,addr1 = server.accept()
 client2,addr2 = server.accept()
 #data = client.recv(max_size)
 
-with open('levels/test_level.json', 'r') as level_file:
-    for line in level_file:
-        file_contents+=str(line)
-level=json.loads(file_contents)
-print(level)
-
 gamedata = {"players":[{"x":level["player_x"], "y":level["player_y"], "image":"assets/players/player1.png"},
     {"x":level["player_x"], "y":level["player_y"], "image":"assets/players/player2.png"}]
 }

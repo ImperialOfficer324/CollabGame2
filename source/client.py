@@ -35,11 +35,14 @@ pygame.display.set_caption("Collaboration Game")
 
 player_id = int(client.recv(28).decode())
 
-players = [pygame.transform.scale(pygame.image.load(game_data["players"][0]["image"]),(450,100)),
-            pygame.transform.scale(pygame.image.load(game_data["players"][1]["image"]),(450,100))]
+players = [pygame.transform.scale(pygame.image.load(game_data["players"][0]["image"]),(75,75)),
+            pygame.transform.scale(pygame.image.load(game_data["players"][1]["image"]),(75,75))]
+
+bg_img = pygame.transform.scale(pygame.image.load('assets/backgrounds/bg1.png'),(WIDTH,HEIGHT))
 
 def display_bg():
     window.fill((0,0,0))
+    window.blit(bg_img,(0,0))
     return 1
 
 player1_animation = "idle"
@@ -53,12 +56,12 @@ animation_counter = 0
 def display_players():
     if player1_animation == "idle":
         offset = 0
-    p1 = pygame.Surface((50, 50))
+    p1 = pygame.Surface((75, 75))
     p1.set_colorkey((0,0,0))
-    p1.blit(players[1], (0, 0), ((player2_animation_state + offset) * 50, 0, 50, 50))
-    p0 = pygame.Surface((50, 50))
+    p1.blit(players[1], (0, 0), ((player2_animation_state + offset) * 75, 0, 75, 75))
+    p0 = pygame.Surface((75, 75))
     p0.set_colorkey((0,0,0))
-    p0.blit(players[0], (0, 0), ((player1_animation_state + offset) * 50, 0, 50, 50))
+    p0.blit(players[0], (0, 0), ((player1_animation_state + offset) * 75, 0, 75, 75))
     if player_id == 0:
         window.blit(p1,(int(game_data["players"][1]["x"]),int(game_data["players"][1]["y"])))
         window.blit(p0,(int(game_data["players"][0]["x"]),int(game_data["players"][0]["y"])))
@@ -98,6 +101,8 @@ server_listener.start()
 
 shoot_counter = 0
 
+move_speed = 5
+
 while game_state != 0:
     clock.tick(60)
     if game_state == 1: # main game loop
@@ -110,25 +115,25 @@ while game_state != 0:
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RIGHT]:
-            new_x = (game_data["players"][player_id]["x"]+1)+75
-            if !(new_x < 0 or new_x + 75 > WIDTH):
-                game_data["players"][player_id]["x"]+=1
-                messages.send_message(f"move {player_id} 1",client)
+            new_x = (game_data["players"][player_id]["x"]+move_speed)+75
+            if not (new_x < 0 or new_x + 75 > WIDTH):
+                game_data["players"][player_id]["x"]+=move_speed
+                messages.send_message(f"move {player_id} {move_speed}",client)
         elif keys[pygame.K_LEFT]:
-            new_x = (game_data["players"][player_id]["x"]-1)
-            if !(new_x < 0 or new_x + 75 > WIDTH):
-                game_data["players"][player_id]["x"]-=1
-                messages.send_message(f"move {player_id} 1",client)
+            new_x = (game_data["players"][player_id]["x"]-move_speed)
+            if not (new_x < 0 or new_x + 75 > WIDTH):
+                game_data["players"][player_id]["x"]-=move_speed
+                messages.send_message(f"move {player_id} -{move_speed}",client)
         elif keys[pygame.K_UP]:
-            new_y = (game_data["players"][player_id]["y"]-1)
-            if !(new_y < 0 or new_y + 75 > HEIGHT):
-                game_data["players"][player_id]["y"]-=1
-                messages.send_message(f"move {player_id} 1",client)
+            new_y = (game_data["players"][player_id]["y"]-move_speed)
+            if not (new_y < 0 or new_y + 75 > HEIGHT):
+                game_data["players"][player_id]["y"]-=move_speed
+                messages.send_message(f"move y {player_id} -{move_speed}",client)
         elif keys[pygame.K_DOWN]:
-            new_y = (game_data["players"][player_id]["y"]+1)+75
-            if !(new_y < 0 or new_y + 75 > HEIGHT):
-                game_data["players"][player_id]["y"]+=1
-                messages.send_message(f"move {player_id} 1",client)
+            new_y = (game_data["players"][player_id]["y"]+move_speed)+75
+            if not (new_y < 0 or new_y > HEIGHT):
+                game_data["players"][player_id]["y"]+=move_speed
+                messages.send_message(f"move y {player_id} {move_speed}",client)
 
         if keys[pygame.K_SPACE]:
             if shoot_counter > 10:

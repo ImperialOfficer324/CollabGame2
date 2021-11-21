@@ -96,6 +96,7 @@ def simplify_vector(vector):
                 vector_counter += 1
         if vector_counter == 8:
             done = True
+    return (x, y)
 
 server_listener = threading.Thread(target=lambda:listen_to_server(client))
 server_listener.start()
@@ -139,7 +140,8 @@ while game_state != 0:
         if keys[pygame.K_SPACE]:
             if shoot_counter > 10:
                 shoot_counter = 0
-                #shoot()
+                messages.send_message("shoot <player id> <vector x>, <vector y>"):
+                game_data["players"][player_id]["bullets"][len(game_data["players"][player_id]["bullets"])+1] = [game_data["players"][player_id]["x"],game_data["players"][player_id]["y"],(x,y)]"
 
         animation_counter += 1
         if animation_counter == 10:

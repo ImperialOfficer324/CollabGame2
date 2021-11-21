@@ -87,7 +87,8 @@ def simplify_vector(vector):
     vector_counter = 0
     while done == False:
         vector_counter = 0
-        for i + 2 in range(8):
+        for x in range(8):
+            i = x+2
             if x % i == 0 and y % i == 0:
                 x = x/i
                 y = y/i
